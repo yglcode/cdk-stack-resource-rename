@@ -86,6 +86,21 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-apigateway",
+      "version": "^1.88.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-lambda",
+      "version": "^1.88.0",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-s3",
+      "version": "^1.88.0",
+      "type": "peer"
+    },
+    {
       "name": "@aws-cdk/core",
       "version": "^1.88.0",
       "type": "peer"
@@ -94,6 +109,21 @@
       "name": "constructs",
       "version": "^3.2.27",
       "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-apigateway",
+      "version": "^1.88.0",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-cdk/aws-lambda",
+      "version": "^1.88.0",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-cdk/aws-s3",
+      "version": "^1.88.0",
+      "type": "runtime"
     },
     {
       "name": "@aws-cdk/core",

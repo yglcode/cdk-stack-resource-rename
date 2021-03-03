@@ -5,16 +5,20 @@ const project = new AwsCdkConstructLibrary({
   authorAddress: 'ygl.code@gmail.com',
   cdkVersion: '1.88.0',
   defaultReleaseBranch: 'main',
-  jsiiFqn: "projen.AwsCdkConstructLibrary",
+  jsiiFqn: 'projen.AwsCdkConstructLibrary',
   name: 'cdk-stack-resource-rename',
   repositoryUrl: 'https://github.com/yglcode/cdk-stack-resource-rename.git',
 
   cdkDependencies: [
     '@aws-cdk/core',
+    '@aws-cdk/aws-apigateway',
+    '@aws-cdk/aws-lambda',
+    '@aws-cdk/aws-s3',
   ],
 
   releaseBranches: ['main'],
 
+  
 });
 
 const common_exclude = [

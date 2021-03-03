@@ -1,0 +1,386 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`integ snapshot validation 1`] = `
+Object {
+  "Outputs": Object {
+    "Dns": Object {
+      "Export": Object {
+        "Name": "ApiDns-xxx",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "https://",
+            Object {
+              "Ref": "widgetsapi0BCA0B12",
+            },
+            ".execute-api.",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            Object {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            Object {
+              "Ref": "widgetsapiDeploymentStageprod19E45538",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "widgetsapiEndpoint2B78C075": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "https://",
+            Object {
+              "Ref": "widgetsapi0BCA0B12",
+            },
+            ".execute-api.",
+            Object {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            Object {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            Object {
+              "Ref": "widgetsapiDeploymentStageprod19E45538",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "WidgetHandlerF8A613CA": Object {
+      "DependsOn": Array [
+        "WidgetHandlerServiceRoleDefaultPolicy69F8D632",
+        "WidgetHandlerServiceRole455C9244",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "ZipFile": "
+                exports.handler = async (event)=> {
+                    console.log('event: ',event,' env: ',process.env);
+                }
+            ",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "BUCKET": Object {
+              "Ref": "WidgetStoreDA467545",
+            },
+          },
+        },
+        "FunctionName": "handler_func-xxx",
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "WidgetHandlerServiceRole455C9244",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs10.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "WidgetHandlerServiceRole455C9244": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "WidgetHandlerServiceRoleDefaultPolicy69F8D632": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "WidgetStoreDA467545",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "WidgetStoreDA467545",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "WidgetHandlerServiceRoleDefaultPolicy69F8D632",
+        "Roles": Array [
+          Object {
+            "Ref": "WidgetHandlerServiceRole455C9244",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "WidgetStoreDA467545": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketName": "widget-store-bucket-xxx",
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "widgetsapi0BCA0B12": Object {
+      "Properties": Object {
+        "Description": "serves widgets",
+        "Name": "Widget Service-xxx",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "widgetsapiAccount54650C10": Object {
+      "DependsOn": Array [
+        "widgetsapi0BCA0B12",
+      ],
+      "Properties": Object {
+        "CloudWatchRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "widgetsapiCloudWatchRole13420B98",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+    },
+    "widgetsapiCloudWatchRole13420B98": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "widgetsapiDeployment9DE3369321af3b77e33ddabbae17e4bdf0eec01a": Object {
+      "DependsOn": Array [
+        "widgetsapiGETFE8E3A17",
+      ],
+      "Properties": Object {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": Object {
+          "Ref": "widgetsapi0BCA0B12",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "widgetsapiDeploymentStageprod19E45538": Object {
+      "Properties": Object {
+        "DeploymentId": Object {
+          "Ref": "widgetsapiDeployment9DE3369321af3b77e33ddabbae17e4bdf0eec01a",
+        },
+        "RestApiId": Object {
+          "Ref": "widgetsapi0BCA0B12",
+        },
+        "StageName": "prod-xxx",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "widgetsapiGETApiPermissionTestintegrationstackwidgetsapiA6B0DCBCGET1DB7D880": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "WidgetHandlerF8A613CA",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "widgetsapi0BCA0B12",
+              },
+              "/test-invoke-stage/GET/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "widgetsapiGETApiPermissionintegrationstackwidgetsapiA6B0DCBCGET5B4A41D8": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "WidgetHandlerF8A613CA",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "widgetsapi0BCA0B12",
+              },
+              "/",
+              Object {
+                "Ref": "widgetsapiDeploymentStageprod19E45538",
+              },
+              "/GET/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "widgetsapiGETFE8E3A17": Object {
+      "Properties": Object {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": Object {
+          "IntegrationHttpMethod": "POST",
+          "RequestTemplates": Object {
+            "application/json": "{\\"statusCode\\": \\"200\\"}",
+          },
+          "Type": "AWS_PROXY",
+          "Uri": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "WidgetHandlerF8A613CA",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "OperationName": "get-widget",
+        "ResourceId": Object {
+          "Fn::GetAtt": Array [
+            "widgetsapi0BCA0B12",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": Object {
+          "Ref": "widgetsapi0BCA0B12",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+  },
+}
+`;
