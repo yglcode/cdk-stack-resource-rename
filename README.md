@@ -15,7 +15,7 @@
     const stack = new core.Stack(app, 'my-stack');
 
     let alias = stack.node.tryGetContext('alias');
-    if (alias!==undefined) {
+    if (alias) {
         //if alias is defined, rename stack and resources' custom names
         //with the "rename" function/method.
         StackResourceRenamer.rename(stack, {
