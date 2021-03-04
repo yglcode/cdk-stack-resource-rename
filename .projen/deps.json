@@ -2,7 +2,23 @@
   "dependencies": [
     {
       "name": "@aws-cdk/assert",
-      "version": "^1.88.0",
+      "version": "^1.91.0",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-apigateway",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-lambda",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/aws-s3",
+      "type": "build"
+    },
+    {
+      "name": "@aws-cdk/core",
       "type": "build"
     },
     {
@@ -86,23 +102,7 @@
       "type": "build"
     },
     {
-      "name": "@aws-cdk/aws-apigateway",
-      "version": "^1.88.0",
-      "type": "peer"
-    },
-    {
-      "name": "@aws-cdk/aws-lambda",
-      "version": "^1.88.0",
-      "type": "peer"
-    },
-    {
-      "name": "@aws-cdk/aws-s3",
-      "version": "^1.88.0",
-      "type": "peer"
-    },
-    {
       "name": "@aws-cdk/core",
-      "version": "^1.88.0",
       "type": "peer"
     },
     {
@@ -111,23 +111,7 @@
       "type": "peer"
     },
     {
-      "name": "@aws-cdk/aws-apigateway",
-      "version": "^1.88.0",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/aws-lambda",
-      "version": "^1.88.0",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/aws-s3",
-      "version": "^1.88.0",
-      "type": "runtime"
-    },
-    {
       "name": "@aws-cdk/core",
-      "version": "^1.88.0",
       "type": "runtime"
     }
   ],
