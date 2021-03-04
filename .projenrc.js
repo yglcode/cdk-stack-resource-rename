@@ -18,7 +18,17 @@ const project = new AwsCdkConstructLibrary({
 
   releaseBranches: ['main'],
 
-  
+  publishToMaven: {
+    javaPackage: 'cdkutils.aspects.resourcerename',
+    mavenGroupId: 'cdkutils.aspects.resourcerename',
+    mavenArtifactId: 'cdk-stack-resource-rename',
+  },
+
+  publishToPypi: {
+    distName: 'cdk-stack-resource-rename',
+    module: 'cdk_stack_resource_rename',
+  },
+
 });
 
 const common_exclude = [

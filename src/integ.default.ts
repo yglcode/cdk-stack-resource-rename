@@ -2,7 +2,7 @@ import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as core from '@aws-cdk/core';
-import { StackResourceRename } from './index';
+import { StackResourceRenamer } from './index';
 
 export class IntegTesting {
   readonly stack: core.Stack[]
@@ -16,8 +16,15 @@ export class IntegTesting {
 
     const stack = new core.Stack(app, 'integration-stack', { env });
 
-    const postfix = 'xxx';
-    core.Aspects.of(stack).add(new StackResourceRename(postfix));
+    let alias = stack.node.tryGetContext('alias');
+    if (alias===undefined) {
+      alias='xxx';
+    }
+    StackResourceRenamer.rename(stack, {
+      rename: (origName, _)=>{
+        return origName+'-'+alias;
+      },
+    });
 
     //for integration test
     this.stack = [stack];
