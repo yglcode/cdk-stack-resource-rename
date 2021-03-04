@@ -1,8 +1,8 @@
 # StackResourceRenamer
-### A CDK aspect, renames CDK stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment without confliction.
+#### A CDK aspect, renames CDK stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment without confliction.
 
 
-## Sample
+### Sample
 
 
 ```ts
