@@ -107,7 +107,6 @@ export class StackResourceRenamer implements cdk.IAspect {
     } else {
       //rename CFN resources
       let ctorName = node.constructor.name;
-      //console.log("==", ctorName)
       if (ctorName.startsWith('Cfn')) {
         this.renameResource(node, ctorName.substring(3));
       }
@@ -147,13 +146,10 @@ export class StackResourceRenamer implements cdk.IAspect {
     let b = (node as any);
     if (b[physicalName] && b[physicalName].length > 0 && !cdk.Token.isUnresolved(b[physicalName])) {
       b[physicalName] = this.renameOper.rename(b[physicalName], resTypeName);
-      //console.log("**** rename: ", b[physicalName]);
     } else if (b[underscoreName] && b[underscoreName].length > 0 && !cdk.Token.isUnresolved(b[underscoreName])) {
       b[underscoreName] = this.renameOper.rename(b[underscoreName], resTypeName);
-      //console.log("**** rename: ", b[underscoreName]);
     } else if (b[this.defaultNameField] && b[this.defaultNameField].length > 0 && !cdk.Token.isUnresolved(b[this.defaultNameField])) {
       b[this.defaultNameField] = this.renameOper.rename(b[this.defaultNameField], resTypeName);
-      //console.log("**** rename: ", b[this.defaultNameField]);
     }
   }
 }
