@@ -1,3 +1,7 @@
+[![NPM version](https://badge.fury.io/js/cdk-stack-resource-rename.svg)](https://badge.fury.io/js/cdk-stack-resource-rename)
+[![PyPI version](https://badge.fury.io/py/cdk-stack-resource-rename.svg)](https://badge.fury.io/py/cdk-stack-resource-rename)
+![Release](https://github.com/yglcode/cdk-stack-resource-rename/workflows/Release/badge.svg)
+
 ## StackResourceRenamer
 #### A CDK aspect, StackResourceRenamer renames CDK stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment without confliction.
 
@@ -34,7 +38,7 @@ To create multiple stacks:
 `cdk -c alias=a1 deploy  `
 will create a stack: my-stack-a1 with my-bucket-a1.
 
-To create more stacks: my-stack-a2 / my-bucket-a2, my-stack-a3 / my-bucket-a3:
+To create more stacks: my-stack-a2 with my-bucket-a2, my-stack-a3 with my-bucket-a3:
 
 `cdk -c alias=a2 deploy`
 
