@@ -1,4 +1,4 @@
-# StackResourceRenamer
+## StackResourceRenamer
 #### A CDK aspect, renames CDK stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment without confliction.
 
 
@@ -12,6 +12,8 @@
 
     let alias = stack.node.tryGetContext('alias');
     if (alias!==undefined) {
+        //if alias is defined, rename stack and resources' custom names
+        //with the "rename" function/method.
         StackResourceRenamer.rename(stack, {
             rename: (origName, _)=>{
                 return origName+'-'+alias;
