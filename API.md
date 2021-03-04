@@ -26,8 +26,6 @@ Name|Description
 
 StackResourceRenamer renames stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment.
 
-Implemented as CDK aspect.
-
 __Implements__: [IAspect](#aws-cdk-core-iaspect)
 
 ### Initializer
@@ -39,7 +37,7 @@ Construct a new StackResourceRenamer.
 new StackResourceRenamer(renameOper: IRenameOperation, props?: RenameProps)
 ```
 
-* **renameOper** (<code>[IRenameOperation](#cdk-stack-resource-rename-irenameoperation)</code>)  RenameOperation user pass in and used to rename stack name and resources' custom physical names.
+* **renameOper** (<code>[IRenameOperation](#cdk-stack-resource-rename-irenameoperation)</code>)  RenameOperation is used to rename stack name and resources' custom physical names.
 * **props** (<code>[RenameProps](#cdk-stack-resource-rename-renameprops)</code>)  Properties are set to customize rename operations.
   * **excludeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose custom physical names could not be changed. __*Default*__: []
   * **includeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose physical names could be updated. __*Default*__: []
@@ -57,21 +55,21 @@ Implement core.IAspect interface.
 visit(node: IConstruct): void
 ```
 
-* **node** (<code>[IConstruct](#aws-cdk-core-iconstruct)</code>)  *No description*
+* **node** (<code>[IConstruct](#aws-cdk-core-iconstruct)</code>)  CFN resources to be renamed.
 
 
 
 
 #### protected renameResource(node, resTypeName) <a id="cdk-stack-resource-rename-stackresourcerenamer-renameresource"></a>
 
-
+Rename a CFN resource or stack.
 
 ```ts
 protected renameResource(node: IConstruct, resTypeName: string): void
 ```
 
-* **node** (<code>[IConstruct](#aws-cdk-core-iconstruct)</code>)  *No description*
-* **resTypeName** (<code>string</code>)  *No description*
+* **node** (<code>[IConstruct](#aws-cdk-core-iconstruct)</code>)  CFN resource or stack.
+* **resTypeName** (<code>string</code>)  The type name of CFN resource.
 
 
 
@@ -85,7 +83,7 @@ static rename(stack: IConstruct, renameOper: IRenameOperation, props?: RenamePro
 ```
 
 * **stack** (<code>[IConstruct](#aws-cdk-core-iconstruct)</code>)  The stack (and all its children resources) to be renamed.
-* **renameOper** (<code>[IRenameOperation](#cdk-stack-resource-rename-irenameoperation)</code>)  RenameOperation user pass in and used to rename stack name and resources' custom physical names.
+* **renameOper** (<code>[IRenameOperation](#cdk-stack-resource-rename-irenameoperation)</code>)  RenameOperation is used to rename stack name and resources' custom physical names.
 * **props** (<code>[RenameProps](#cdk-stack-resource-rename-renameprops)</code>)  Properties are set to customize rename operations.
   * **excludeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose custom physical names could not be changed. __*Default*__: []
   * **includeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose physical names could be updated. __*Default*__: []
@@ -108,13 +106,14 @@ Interface of operation used to rename stack and its resources.
 Rename method to rename stack and its resources' custom physical names.
 
 AWS generated physical names are not changed.
+The updated stack name or custom resource's name is returned.
 
 ```ts
 rename(origVal: string, typeName: string): string
 ```
 
 * **origVal** (<code>string</code>)  The original custom physical name.
-* **typeName** (<code>string</code>)  The name of resource type.
+* **typeName** (<code>string</code>)  The type name of CFN resource.
 
 __Returns__:
 * <code>string</code>
