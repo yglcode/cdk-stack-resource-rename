@@ -34,7 +34,7 @@ To create multiple stacks:
 `cdk -c alias=a1 deploy  `
 will create a stack: my-stack-a1 with my-bucket-a1.
 
-To create more stacks: my-stack-a2 with my-bucket-a2, my-stack-a3 with my-bucket-a3:
+To create more stacks: my-stack-a2 / my-bucket-a2, my-stack-a3 / my-bucket-a3:
 
 `cdk -c alias=a2 deploy`
 
