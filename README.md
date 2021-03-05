@@ -7,7 +7,7 @@
 
 #### A CDK aspect, StackResourceRenamer renames CDK stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment without confliction.
 
-### API: [API.md](./API.md)
+### API: [API.md](https://github.com/yglcode/cdk-stack-resource-rename/blob/main/API.md)
 
 ### Samples
 
