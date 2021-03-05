@@ -1,5 +1,6 @@
 [![NPM version](https://badge.fury.io/js/cdk-stack-resource-rename.svg)](https://badge.fury.io/js/cdk-stack-resource-rename)
 [![PyPI version](https://badge.fury.io/py/cdk-stack-resource-rename.svg)](https://badge.fury.io/py/cdk-stack-resource-rename)
+[![Nuget version](https://badge.fury.io/nu/cdk-stack-resource-rename.svg)](https://badge.fury.io/nu/CdkUtils.Aspects.ResourceRename)
 ![Release](https://github.com/yglcode/cdk-stack-resource-rename/workflows/Release/badge.svg)
 
 
@@ -12,32 +13,32 @@
 ### Samples
 
 *typescript*
-
 ```ts
-    const app = new core.App();
+import { StackResourceRenamer } from 'cdk-stack-resource-rename';
 
-    const stack = new core.Stack(app, 'my-stack');
+const app = new core.App();
+const stack = new core.Stack(app, 'my-stack');
 
-    let alias = stack.node.tryGetContext('alias');
-    if (alias) {
-        //if alias is defined, rename stack and resources' custom names
-        StackResourceRenamer.rename(stack, {
-            rename: (origName, _)=>{
-                return origName+'-'+alias;
-            },
-        });
-    }
-
-    //resources in stack
-    const bucket = new s3.Bucket(stack, 'bucket', {
-      bucketName: 'my-bucket',
+let alias = stack.node.tryGetContext('alias');
+if (alias) {
+    //if alias is defined, rename stack and resources' custom names
+    StackResourceRenamer.rename(stack, {
+        rename: (origName, _)=>{
+            return origName+'-'+alias;
+        },
     });
-    ... 
+}
+
+//resources in stack
+const bucket = new s3.Bucket(stack, 'bucket', {
+    bucketName: 'my-bucket',
+});
+... 
 ```
-
 *python*
-
 ```python
+from cdk_stack_resource_rename import (StackResourceRenamer, IRenameOperation)
+
 @jsii.implements(IRenameOperation)
 class RenameOper:
     def __init__(self, alias):
@@ -52,6 +53,22 @@ class AppStack(core.Stack):
         if alias != None:
             # if alias is defined, rename stack/resources' custom names
             StackResourceRenamer.rename(self, RenameOper(alias))
+```
+*java*
+```java
+import cdkutils.aspects.resourcerename.StackResourceRenamer;
+import cdkutils.aspects.resourcerename.IRenameOperation;
+
+public class AppStack extends Stack {
+    ......
+    String alias = (String) this.getNode().tryGetContext("alias");
+    if (alias != null) {
+        StackResourceRenamer.rename(this, new IRenameOperation() {
+            public String rename(String origName, String typeName) {
+                return origName + "-"+alias;
+            }
+        });
+    }
 ```
 
 To create multiple stacks:

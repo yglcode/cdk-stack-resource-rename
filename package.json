@@ -122,6 +122,10 @@
       "python": {
         "distName": "cdk-stack-resource-rename",
         "module": "cdk_stack_resource_rename"
+      },
+      "dotnet": {
+        "namespace": "CdkUtils.Aspects",
+        "packageId": "CdkUtils.Aspects.ResourceRename"
       }
     },
     "tsc": {

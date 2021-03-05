@@ -38,6 +38,10 @@ const project = new AwsCdkConstructLibrary({
     module: 'cdk_stack_resource_rename',
   },
 
+  publishToNuget: {
+    dotNetNamespace: 'CdkUtils.Aspects',
+    packageId: 'CdkUtils.Aspects.ResourceRename',
+  },
 });
 
 const common_exclude = [
