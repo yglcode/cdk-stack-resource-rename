@@ -68,8 +68,7 @@ export class StackResourceRenamer implements cdk.IAspect {
   //mapping for resources whose physical names donot follow
   //the regular naming conventions: `${resourceType}`+'Name'
   private irregularNames: { [key: string]: string } = {
-    Stack: '_stackName',
-    Output: '_exportName',
+    Output: 'exportName',
     ScalingPolicy: 'policyName',
     SlackChannelConfiguration: 'configurationName',
     CompositeAlarm: 'alarmName',
@@ -140,16 +139,35 @@ export class StackResourceRenamer implements cdk.IAspect {
     if (physicalName.length === 0) {
       return;
     }
-    //some protected fields start with underscore
+    //some names (eg. stackName, exportName) only has getter,
+    //need access protected fields starting with underscore
     let underscoreName = '_' + physicalName;
     //rename
     let b = (node as any);
     if (b[physicalName] && b[physicalName].length > 0 && !cdk.Token.isUnresolved(b[physicalName])) {
-      b[physicalName] = this.renameOper.rename(b[physicalName], resTypeName);
-    } else if (b[underscoreName] && b[underscoreName].length > 0 && !cdk.Token.isUnresolved(b[underscoreName])) {
-      b[underscoreName] = this.renameOper.rename(b[underscoreName], resTypeName);
-    } else if (b[this.defaultNameField] && b[this.defaultNameField].length > 0 && !cdk.Token.isUnresolved(b[this.defaultNameField])) {
+      if (isWritable(b, physicalName)) {
+        b[physicalName] = this.renameOper.rename(b[physicalName], resTypeName);
+      } else if (b[underscoreName] && isWritable(b, underscoreName) && b[underscoreName].length > 0 &&
+        !cdk.Token.isUnresolved(b[underscoreName])) {
+        b[underscoreName] = this.renameOper.rename(b[underscoreName], resTypeName);
+      }
+    } else if (b[this.defaultNameField] && isWritable(b, this.defaultNameField) &&
+      b[this.defaultNameField].length > 0 && !cdk.Token.isUnresolved(b[this.defaultNameField])) {
       b[this.defaultNameField] = this.renameOper.rename(b[this.defaultNameField], resTypeName);
     }
   }
+}
+
+function isWritable<T extends Object>(obj: T, key: keyof T): boolean {
+  let desc: PropertyDescriptor|undefined;
+  for (let o = obj; o != Object.prototype; o = Object.getPrototypeOf(o)) {
+    desc = Object.getOwnPropertyDescriptor(o, key);
+    if (desc !== undefined) {
+      break;
+    }
+  }
+  if (desc===undefined) {
+    desc={};
+  }
+  return Boolean(desc.writable);
 }
