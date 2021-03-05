@@ -2,12 +2,16 @@
 [![PyPI version](https://badge.fury.io/py/cdk-stack-resource-rename.svg)](https://badge.fury.io/py/cdk-stack-resource-rename)
 ![Release](https://github.com/yglcode/cdk-stack-resource-rename/workflows/Release/badge.svg)
 
+
 ## StackResourceRenamer
+
 #### A CDK aspect, StackResourceRenamer renames CDK stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment without confliction.
 
+### API: [API.md](./API.md)
 
-### Sample
+### Samples
 
+*typescript*
 
 ```ts
     const app = new core.App();
@@ -17,7 +21,6 @@
     let alias = stack.node.tryGetContext('alias');
     if (alias) {
         //if alias is defined, rename stack and resources' custom names
-        //with the "rename" function/method.
         StackResourceRenamer.rename(stack, {
             rename: (origName, _)=>{
                 return origName+'-'+alias;
@@ -30,7 +33,25 @@
       bucketName: 'my-bucket',
     });
     ... 
+```
 
+*python*
+
+```python
+@jsii.implements(IRenameOperation)
+class RenameOper:
+    def __init__(self, alias):
+        self.alias=alias
+    def rename(self, origName, typeName):
+        return origName+'-'+self.alias
+
+class AppStack(core.Stack):
+    def __init__(self, scope: core.Construct, construct_id: str, **kwargs) -> None:
+        ......
+        alias = self.node.try_get_context("alias")
+        if alias != None:
+            # if alias is defined, rename stack/resources' custom names
+            StackResourceRenamer.rename(self, RenameOper(alias))
 ```
 
 To create multiple stacks:
