@@ -19,6 +19,7 @@ cdk.out
 dist
 images
 junit.xml
+maven_release*
 yarn-error.log
 !.jsii
 !/lib
