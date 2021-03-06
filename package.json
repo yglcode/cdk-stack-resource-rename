@@ -124,7 +124,7 @@
         "module": "cdk_stack_resource_rename"
       },
       "dotnet": {
-        "namespace": "CdkUtils.Aspects",
+        "namespace": "CdkUtils.Aspects.ResourceRename",
         "packageId": "CdkUtils.Aspects.ResourceRename"
       }
     },

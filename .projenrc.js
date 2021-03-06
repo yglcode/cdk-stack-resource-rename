@@ -39,7 +39,7 @@ const project = new AwsCdkConstructLibrary({
   },
 
   publishToNuget: {
-    dotNetNamespace: 'CdkUtils.Aspects',
+    dotNetNamespace: 'CdkUtils.Aspects.ResourceRename',
     packageId: 'CdkUtils.Aspects.ResourceRename',
   },
 });

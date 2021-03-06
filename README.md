@@ -70,7 +70,28 @@ public class AppStack extends Stack {
         });
     }
 ```
-
+*csharp*
+```csharp
+using CdkUtils.Aspects.ResourceRename;
+public class RenameOper: Amazon.JSII.Runtime.Deputy.DeputyBase, IRenameOperation {
+    private string alias;
+    public RenameOper(string alias) {
+        this.alias=alias;
+    }
+    public string Rename(string origName, string typeName) {
+        return origName+"-"+alias;
+    }
+}
+public class AppStack : Stack
+{
+    internal AppStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
+    {
+        ......
+        var alias = (string)this.Node.TryGetContext("alias");
+        if (alias!=null) {
+            StackResourceRenamer.Rename(this, new RenameOper(alias));
+        }            
+```
 To create multiple stacks:
 
 `cdk -c alias=a1 deploy  `
