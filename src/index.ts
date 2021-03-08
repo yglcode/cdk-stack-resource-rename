@@ -9,7 +9,9 @@ export interface IRenameOperation {
    * AWS generated physical names are not changed unless StackResourceRenamer
    * is created with RenameProps{ userCustomNameOnly:false }.
    * The updated stack name or resource's name is returned.
-   * @param resourceName The original resource physical name (will be empty '' for AWS generated names).
+   * @param resourceName The original resource physical name (if it is not user 
+   * specified custom name, it is a AWS generated name/token, can be checked with
+   * cdk.Token.isUnresolved().
    * @param resourceType The type name of CFN resource.
    */
   rename(resourceName: string, resourceType: string): string;
@@ -161,35 +163,25 @@ export class StackResourceRenamer implements cdk.IAspect {
     //rename
     let b = (node as any);
     if (b[physicalName] && b[physicalName].length > 0) {
-      let resName = this.isTarget(b[physicalName]);
-      if (isWritable(b, physicalName) && resName.ok) {
-        b[physicalName] = this.renameOper.rename(resName.value, resTypeName);
-      } else if (b[underscoreName] && b[underscoreName].length > 0 && isWritable(b, underscoreName)) {
-        resName = this.isTarget(b[underscoreName]);
-        if (resName.ok) {
-          b[underscoreName] = this.renameOper.rename(resName.value, resTypeName);
-        }
+      if (isWritable(b, physicalName) && this.isTarget(b[physicalName])) {
+        b[physicalName] = this.renameOper.rename(b[physicalName], resTypeName);
+      } else if (b[underscoreName] && b[underscoreName].length > 0 && isWritable(b, underscoreName) && this.isTarget(b[underscoreName])) {
+        b[underscoreName] = this.renameOper.rename(b[underscoreName], resTypeName);
       }
-    } else if (b[this.defaultNameField] && b[this.defaultNameField].length > 0 && isWritable(b, this.defaultNameField)) {
-      let resName = this.isTarget(b[this.defaultNameField]);
-      if (resName.ok) {
-        b[this.defaultNameField] = this.renameOper.rename(resName.value, resTypeName);
-      }
+    } else if (b[this.defaultNameField] && b[this.defaultNameField].length > 0 &&
+      isWritable(b, this.defaultNameField) && this.isTarget(b[this.defaultNameField])) {
+      b[this.defaultNameField] = this.renameOper.rename(b[this.defaultNameField], resTypeName);
     }
   }
   /**
    * check if a resName(resource name) is a valid target for rename;
-   * if valid, return correct resName and ok:true, otherwise return ok:false
    */
-  isTarget(resName: any): {value: string; ok:boolean} {
+  isTarget(resName: any): boolean {
     let isAWSGenerated = cdk.Token.isUnresolved(resName);
     if (this.customNameOnly && isAWSGenerated) {
-      return { value: '', ok: false };
+      return false;
     }
-    if (!this.customNameOnly && isAWSGenerated) {
-      return { value: '', ok: true }; //return empty for aws generated names
-    }
-    return { value: resName, ok: true };
+    return true;
   }
 }
 
