@@ -5,21 +5,30 @@ import * as cdk from '@aws-cdk/core';
  */
 export interface IRenameOperation {
   /**
-   * Rename method to rename stack and its resources' custom physical names.
-   * AWS generated physical names are not changed.
-   * The updated stack name or custom resource's name is returned.
-   * @param origVal The original custom physical name.
-   * @param typeName The type name of CFN resource.
+   * Rename method to rename stack and its resources' physical names.
+   * AWS generated physical names are not changed unless StackResourceRenamer
+   * is created with RenameProps{ userCustomNameOnly:false }.
+   * The updated stack name or resource's name is returned.
+   * @param resourceName The original resource physical name (will be empty '' for AWS generated names).
+   * @param resourceType The type name of CFN resource.
    */
-  rename(origVal: string, typeName: string): string;
+  rename(resourceName: string, resourceType: string): string;
 }
+
 /**
  * Properties to control rename process.
  */
 export interface RenameProps {
   /**
+  * Only rename user provided custom names.
+  * If set to false, rename() will be invoked for all resources names with or without custom names.
+  *
+  * @default True
+  */
+  readonly userCustomNameOnly?: boolean;
+  /**
   * Mapping of resourceType names to physicalName fields
-  * for resources whose physical names donot follow
+  * for resources whose physicalName field donot follow
   * the regular naming conventions: `${resourceType}`+'Name'
   *
   * @default {}
@@ -27,7 +36,7 @@ export interface RenameProps {
   readonly irregularResourceNames?: { [key: string]: string };
 
   /**
-  * An array of Resource Types whose custom physical names could not be changed.
+  * An array of Resource Types whose physical names could not be changed.
   *
   * An empty array will allow the renaming for all resources. A non-empty
   * array will apply rename operation only if the Resource type is not in
@@ -39,7 +48,7 @@ export interface RenameProps {
   /**
   * An array of Resource Types whose physical names could be updated.
   *
-  * An empty array will not allow any renaming to all resources. A
+  * An empty array will not allow any renaming to resources. A
   * non-empty array will allow renaming only if the Resource type is in
   * this array.
   * @default []
@@ -49,7 +58,7 @@ export interface RenameProps {
 
 /**
  * StackResourceRenamer renames stack name and stack's subordinate resources'
- * custom physical names, so that a CDK stack can be used to create multiple
+ * physical names, so that a CDK stack can be used to create multiple
  * stacks in same AWS environment.
  */
 export class StackResourceRenamer implements cdk.IAspect {
@@ -57,8 +66,9 @@ export class StackResourceRenamer implements cdk.IAspect {
    * Static method to rename a stack and all its subordinate resources.
    * @param stack The stack (and all its children resources) to be renamed.
    * @param renameOper RenameOperation is used to rename
-   * stack name and resources' custom physical names. AWS generated
-   * physical names are not changed.
+   * stack name and resources' physical names. AWS generated
+   * physical names are not changed unless the "props" is set with
+   * RenameProps{userCustomNameOnly:false}
    * @param props Properties are set to customize rename operations.
    */
   static rename(stack: cdk.IConstruct, renameOper: IRenameOperation, props: RenameProps = {}) {
@@ -77,12 +87,15 @@ export class StackResourceRenamer implements cdk.IAspect {
   };
   private includeResTypes: string[] | undefined;
   private excludeResTypes: string[] | undefined;
+  //by default, only rename user provdied custom names
+  private customNameOnly = true;
   private defaultNameField = 'name';
   /**
    * Construct a new StackResourceRenamer.
    * @param renameOper RenameOperation is used to rename
    * stack name and resources' custom physical names. AWS generated
-   * physical names are not changed.
+   * physical names are not changed unless the "props" is set with
+   * RenameProps{userCustomNameOnly:false}
    * @param props Properties are set to customize rename operations.
    */
   constructor(private renameOper: IRenameOperation, props: RenameProps = {}) {
@@ -94,6 +107,9 @@ export class StackResourceRenamer implements cdk.IAspect {
     }
     this.excludeResTypes = props.excludeResourceTypes;
     this.includeResTypes = props.includeResourceTypes;
+    if (props.userCustomNameOnly!==undefined) {
+      this.customNameOnly = props.userCustomNameOnly;
+    }
   }
   /**
    * Implement core.IAspect interface
@@ -144,17 +160,36 @@ export class StackResourceRenamer implements cdk.IAspect {
     let underscoreName = '_' + physicalName;
     //rename
     let b = (node as any);
-    if (b[physicalName] && b[physicalName].length > 0 && !cdk.Token.isUnresolved(b[physicalName])) {
-      if (isWritable(b, physicalName)) {
-        b[physicalName] = this.renameOper.rename(b[physicalName], resTypeName);
-      } else if (b[underscoreName] && isWritable(b, underscoreName) && b[underscoreName].length > 0 &&
-        !cdk.Token.isUnresolved(b[underscoreName])) {
-        b[underscoreName] = this.renameOper.rename(b[underscoreName], resTypeName);
+    if (b[physicalName] && b[physicalName].length > 0) {
+      let resName = this.isTarget(b[physicalName]);
+      if (isWritable(b, physicalName) && resName.ok) {
+        b[physicalName] = this.renameOper.rename(resName.value, resTypeName);
+      } else if (b[underscoreName] && b[underscoreName].length > 0 && isWritable(b, underscoreName)) {
+        resName = this.isTarget(b[underscoreName]);
+        if (resName.ok) {
+          b[underscoreName] = this.renameOper.rename(resName.value, resTypeName);
+        }
       }
-    } else if (b[this.defaultNameField] && isWritable(b, this.defaultNameField) &&
-      b[this.defaultNameField].length > 0 && !cdk.Token.isUnresolved(b[this.defaultNameField])) {
-      b[this.defaultNameField] = this.renameOper.rename(b[this.defaultNameField], resTypeName);
+    } else if (b[this.defaultNameField] && b[this.defaultNameField].length > 0 && isWritable(b, this.defaultNameField)) {
+      let resName = this.isTarget(b[this.defaultNameField]);
+      if (resName.ok) {
+        b[this.defaultNameField] = this.renameOper.rename(resName.value, resTypeName);
+      }
     }
+  }
+  /**
+   * check if a resName(resource name) is a valid target for rename;
+   * if valid, return correct resName and ok:true, otherwise return ok:false
+   */
+  isTarget(resName: any): {value: string; ok:boolean} {
+    let isAWSGenerated = cdk.Token.isUnresolved(resName);
+    if (this.customNameOnly && isAWSGenerated) {
+      return { value: '', ok: false };
+    }
+    if (!this.customNameOnly && isAWSGenerated) {
+      return { value: '', ok: true }; //return empty for aws generated names
+    }
+    return { value: resName, ok: true };
   }
 }
 

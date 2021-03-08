@@ -21,6 +21,13 @@ Name|Description
 [IRenameOperation](#cdk-stack-resource-rename-irenameoperation)|Interface of operation used to rename stack and its resources.
 
 
+**Enums**
+
+Name|Description
+----|-----------
+[TargetNameType](#cdk-stack-resource-rename-targetnametype)|*No description*
+
+
 
 ## class StackResourceRenamer  <a id="cdk-stack-resource-rename-stackresourcerenamer"></a>
 
@@ -42,6 +49,7 @@ new StackResourceRenamer(renameOper: IRenameOperation, props?: RenameProps)
   * **excludeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose custom physical names could not be changed. __*Default*__: []
   * **includeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose physical names could be updated. __*Default*__: []
   * **irregularResourceNames** (<code>Map<string, string></code>)  Mapping of resourceType names to physicalName fields for resources whose physical names donot follow the regular naming conventions: `${resourceType}`+'Name'. __*Default*__: {}
+  * **renameTarget** (<code>[TargetNameType](#cdk-stack-resource-rename-targetnametype)</code>)  *No description* __*Optional*__
 
 
 ### Methods
@@ -88,6 +96,7 @@ static rename(stack: IConstruct, renameOper: IRenameOperation, props?: RenamePro
   * **excludeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose custom physical names could not be changed. __*Default*__: []
   * **includeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose physical names could be updated. __*Default*__: []
   * **irregularResourceNames** (<code>Map<string, string></code>)  Mapping of resourceType names to physicalName fields for resources whose physical names donot follow the regular naming conventions: `${resourceType}`+'Name'. __*Default*__: {}
+  * **renameTarget** (<code>[TargetNameType](#cdk-stack-resource-rename-targetnametype)</code>)  *No description* __*Optional*__
 
 
 
@@ -132,6 +141,18 @@ Name | Type | Description
 **excludeResourceTypes**? | <code>Array<string></code> | An array of Resource Types whose custom physical names could not be changed.<br/>__*Default*__: []
 **includeResourceTypes**? | <code>Array<string></code> | An array of Resource Types whose physical names could be updated.<br/>__*Default*__: []
 **irregularResourceNames**? | <code>Map<string, string></code> | Mapping of resourceType names to physicalName fields for resources whose physical names donot follow the regular naming conventions: `${resourceType}`+'Name'.<br/>__*Default*__: {}
+**renameTarget**? | <code>[TargetNameType](#cdk-stack-resource-rename-targetnametype)</code> | __*Optional*__
 
+
+
+## enum TargetNameType  <a id="cdk-stack-resource-rename-targetnametype"></a>
+
+
+
+Name | Description
+-----|-----
+**USER_CUSTOM_NAMES** |
+**AWS_GENERATED_NAMES** |
+**ALL_NAMES** |
 
 

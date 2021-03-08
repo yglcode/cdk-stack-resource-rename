@@ -13,7 +13,6 @@ const project = new AwsCdkConstructLibrary({
     '@aws-cdk/core',
   ],
 
-  //cdkDependencies: [
   devDeps: [
     '@aws-cdk/core',
     '@aws-cdk/aws-apigateway',
