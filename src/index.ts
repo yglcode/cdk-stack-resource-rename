@@ -11,8 +11,10 @@ export interface IRenameOperation {
    * The updated stack name or resource's name is returned.
    * @param resourceName The original resource physical name (if it is not user
    * specified custom name, it is a AWS generated name/token, can be checked with
-   * cdk.Token.isUnresolved()).
+   * cdk.Token.isUnresolved()). If you want to keep original resource name,
+   * simply return it in "rename" function.
    * @param resourceType The type name of CFN resource.
+   * @returns updatedResourceName This is final resource name to be used.
    */
   rename(resourceName: string, resourceType: string): string;
 }
