@@ -9,9 +9,9 @@ export interface IRenameOperation {
    * AWS generated physical names are not changed unless StackResourceRenamer
    * is created with RenameProps{ userCustomNameOnly:false }.
    * The updated stack name or resource's name is returned.
-   * @param resourceName The original resource physical name (if it is not user 
+   * @param resourceName The original resource physical name (if it is not user
    * specified custom name, it is a AWS generated name/token, can be checked with
-   * cdk.Token.isUnresolved().
+   * cdk.Token.isUnresolved()).
    * @param resourceType The type name of CFN resource.
    */
   rename(resourceName: string, resourceType: string): string;

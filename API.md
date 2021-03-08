@@ -4,7 +4,7 @@
 
 Name|Description
 ----|-----------
-[StackResourceRenamer](#cdk-stack-resource-rename-stackresourcerenamer)|StackResourceRenamer renames stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment.
+[StackResourceRenamer](#cdk-stack-resource-rename-stackresourcerenamer)|StackResourceRenamer renames stack name and stack's subordinate resources' physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment.
 
 
 **Structs**
@@ -21,17 +21,10 @@ Name|Description
 [IRenameOperation](#cdk-stack-resource-rename-irenameoperation)|Interface of operation used to rename stack and its resources.
 
 
-**Enums**
-
-Name|Description
-----|-----------
-[TargetNameType](#cdk-stack-resource-rename-targetnametype)|*No description*
-
-
 
 ## class StackResourceRenamer  <a id="cdk-stack-resource-rename-stackresourcerenamer"></a>
 
-StackResourceRenamer renames stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment.
+StackResourceRenamer renames stack name and stack's subordinate resources' physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment.
 
 __Implements__: [IAspect](#aws-cdk-core-iaspect)
 
@@ -44,16 +37,29 @@ Construct a new StackResourceRenamer.
 new StackResourceRenamer(renameOper: IRenameOperation, props?: RenameProps)
 ```
 
-* **renameOper** (<code>[IRenameOperation](#cdk-stack-resource-rename-irenameoperation)</code>)  RenameOperation is used to rename stack name and resources' custom physical names.
+* **renameOper** (<code>[IRenameOperation](#cdk-stack-resource-rename-irenameoperation)</code>)  RenameOperation is used to rename stack name and resources' physical names.
 * **props** (<code>[RenameProps](#cdk-stack-resource-rename-renameprops)</code>)  Properties are set to customize rename operations.
-  * **excludeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose custom physical names could not be changed. __*Default*__: []
+  * **excludeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose physical names could not be changed. __*Default*__: []
   * **includeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose physical names could be updated. __*Default*__: []
-  * **irregularResourceNames** (<code>Map<string, string></code>)  Mapping of resourceType names to physicalName fields for resources whose physical names donot follow the regular naming conventions: `${resourceType}`+'Name'. __*Default*__: {}
-  * **renameTarget** (<code>[TargetNameType](#cdk-stack-resource-rename-targetnametype)</code>)  *No description* __*Optional*__
+  * **irregularResourceNames** (<code>Map<string, string></code>)  Mapping of resourceType names to physicalName fields for resources whose physicalName field donot follow the regular naming conventions: `${resourceType}`+'Name'. __*Default*__: {}
+  * **userCustomNameOnly** (<code>boolean</code>)  Only rename user provided custom names. __*Default*__: True
 
 
 ### Methods
 
+
+#### isTarget(resName) <a id="cdk-stack-resource-rename-stackresourcerenamer-istarget"></a>
+
+check if a resName(resource name) is a valid target for rename;
+
+```ts
+isTarget(resName: any): boolean
+```
+
+* **resName** (<code>any</code>)  *No description*
+
+__Returns__:
+* <code>boolean</code>
 
 #### visit(node) <a id="cdk-stack-resource-rename-stackresourcerenamer-visit"></a>
 
@@ -91,12 +97,12 @@ static rename(stack: IConstruct, renameOper: IRenameOperation, props?: RenamePro
 ```
 
 * **stack** (<code>[IConstruct](#aws-cdk-core-iconstruct)</code>)  The stack (and all its children resources) to be renamed.
-* **renameOper** (<code>[IRenameOperation](#cdk-stack-resource-rename-irenameoperation)</code>)  RenameOperation is used to rename stack name and resources' custom physical names.
+* **renameOper** (<code>[IRenameOperation](#cdk-stack-resource-rename-irenameoperation)</code>)  RenameOperation is used to rename stack name and resources' physical names.
 * **props** (<code>[RenameProps](#cdk-stack-resource-rename-renameprops)</code>)  Properties are set to customize rename operations.
-  * **excludeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose custom physical names could not be changed. __*Default*__: []
+  * **excludeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose physical names could not be changed. __*Default*__: []
   * **includeResourceTypes** (<code>Array<string></code>)  An array of Resource Types whose physical names could be updated. __*Default*__: []
-  * **irregularResourceNames** (<code>Map<string, string></code>)  Mapping of resourceType names to physicalName fields for resources whose physical names donot follow the regular naming conventions: `${resourceType}`+'Name'. __*Default*__: {}
-  * **renameTarget** (<code>[TargetNameType](#cdk-stack-resource-rename-targetnametype)</code>)  *No description* __*Optional*__
+  * **irregularResourceNames** (<code>Map<string, string></code>)  Mapping of resourceType names to physicalName fields for resources whose physicalName field donot follow the regular naming conventions: `${resourceType}`+'Name'. __*Default*__: {}
+  * **userCustomNameOnly** (<code>boolean</code>)  Only rename user provided custom names. __*Default*__: True
 
 
 
@@ -110,19 +116,20 @@ Interface of operation used to rename stack and its resources.
 ### Methods
 
 
-#### rename(origVal, typeName) <a id="cdk-stack-resource-rename-irenameoperation-rename"></a>
+#### rename(resourceName, resourceType) <a id="cdk-stack-resource-rename-irenameoperation-rename"></a>
 
-Rename method to rename stack and its resources' custom physical names.
+Rename method to rename stack and its resources' physical names.
 
-AWS generated physical names are not changed.
-The updated stack name or custom resource's name is returned.
+AWS generated physical names are not changed unless StackResourceRenamer
+is created with RenameProps{ userCustomNameOnly:false }.
+The updated stack name or resource's name is returned.
 
 ```ts
-rename(origVal: string, typeName: string): string
+rename(resourceName: string, resourceType: string): string
 ```
 
-* **origVal** (<code>string</code>)  The original custom physical name.
-* **typeName** (<code>string</code>)  The type name of CFN resource.
+* **resourceName** (<code>string</code>)  The original resource physical name (if it is not user specified custom name, it is a AWS generated name/token, can be checked with cdk.Token.isUnresolved()).
+* **resourceType** (<code>string</code>)  The type name of CFN resource.
 
 __Returns__:
 * <code>string</code>
@@ -138,21 +145,10 @@ Properties to control rename process.
 
 Name | Type | Description 
 -----|------|-------------
-**excludeResourceTypes**? | <code>Array<string></code> | An array of Resource Types whose custom physical names could not be changed.<br/>__*Default*__: []
+**excludeResourceTypes**? | <code>Array<string></code> | An array of Resource Types whose physical names could not be changed.<br/>__*Default*__: []
 **includeResourceTypes**? | <code>Array<string></code> | An array of Resource Types whose physical names could be updated.<br/>__*Default*__: []
-**irregularResourceNames**? | <code>Map<string, string></code> | Mapping of resourceType names to physicalName fields for resources whose physical names donot follow the regular naming conventions: `${resourceType}`+'Name'.<br/>__*Default*__: {}
-**renameTarget**? | <code>[TargetNameType](#cdk-stack-resource-rename-targetnametype)</code> | __*Optional*__
+**irregularResourceNames**? | <code>Map<string, string></code> | Mapping of resourceType names to physicalName fields for resources whose physicalName field donot follow the regular naming conventions: `${resourceType}`+'Name'.<br/>__*Default*__: {}
+**userCustomNameOnly**? | <code>boolean</code> | Only rename user provided custom names.<br/>__*Default*__: True
 
-
-
-## enum TargetNameType  <a id="cdk-stack-resource-rename-targetnametype"></a>
-
-
-
-Name | Description
------|-----
-**USER_CUSTOM_NAMES** |
-**AWS_GENERATED_NAMES** |
-**ALL_NAMES** |
 
 
