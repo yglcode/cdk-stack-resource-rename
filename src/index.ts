@@ -93,7 +93,7 @@ export class StackResourceRenamer implements cdk.IAspect {
   /**
    * Construct a new StackResourceRenamer.
    * @param renameOper RenameOperation is used to rename
-   * stack name and resources' custom physical names. AWS generated
+   * stack name and resources' physical names. AWS generated
    * physical names are not changed unless the "props" is set with
    * RenameProps{userCustomNameOnly:false}
    * @param props Properties are set to customize rename operations.
