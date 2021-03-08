@@ -6,9 +6,31 @@
 
 ## StackResourceRenamer
 
-#### A CDK aspect, StackResourceRenamer renames CDK stack name and stack's subordinate resources' custom physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment without confliction.
+#### A CDK aspect, StackResourceRenamer renames CDK stack name and stack's subordinate resources' physical names, so that a CDK stack can be used to create multiple stacks in same AWS environment without confliction.
+
 
 ### API: [API.md](https://github.com/yglcode/cdk-stack-resource-rename/blob/main/API.md)
+
+Two main use cases:
+
+1. rename custom resources names in stack, so that stack can be reused and replicated:
+```ts
+StackResourceRenamer.rename(stack, {
+    rename: (resName, _)=>{
+        return resName+'-'+alias;
+    },
+});
+```
+
+2. for resources without custom name, which by default will use unique id AWS auto generate as its physical id, we can create a more readable and identifiable name, for testing, debugging or metrics monitoring environments.
+```ts
+StackResourceRenamer.rename(stack, {
+    rename: (_, typeName)=>{
+        counts[typeName]++;
+        return projectName+'-'+serviceName+'-'+typeName+'-'+counts[typeName];
+    },
+}, { userCustomNameOnly: false });
+```
 
 ### Samples
 
@@ -23,8 +45,8 @@ let alias = stack.node.tryGetContext('alias');
 if (alias) {
     //if alias is defined, rename stack and resources' custom names
     StackResourceRenamer.rename(stack, {
-        rename: (origName, _)=>{
-            return origName+'-'+alias;
+        rename: (resName, _)=>{
+            return resName+'-'+alias;
         },
     });
 }
@@ -43,8 +65,8 @@ from cdk_stack_resource_rename import (StackResourceRenamer, IRenameOperation)
 class RenameOper:
     def __init__(self, alias):
         self.alias=alias
-    def rename(self, origName, typeName):
-        return origName+'-'+self.alias
+    def rename(self, resName, typeName):
+        return resName+'-'+self.alias
 
 class AppStack(core.Stack):
     def __init__(self, scope: core.Construct, construct_id: str, **kwargs) -> None:
@@ -64,8 +86,8 @@ public class AppStack extends Stack {
     String alias = (String) this.getNode().tryGetContext("alias");
     if (alias != null) {
         StackResourceRenamer.rename(this, new IRenameOperation() {
-            public String rename(String origName, String typeName) {
-                return origName + "-"+alias;
+            public String rename(String resName, String typeName) {
+                return resName + "-"+alias;
             }
         });
     }
@@ -78,8 +100,8 @@ public class RenameOper: Amazon.JSII.Runtime.Deputy.DeputyBase, IRenameOperation
     public RenameOper(string alias) {
         this.alias=alias;
     }
-    public string Rename(string origName, string typeName) {
-        return origName+"-"+alias;
+    public string Rename(string resName, string typeName) {
+        return resName+"-"+alias;
     }
 }
 public class AppStack : Stack
