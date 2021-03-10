@@ -10,7 +10,7 @@ export interface IRenameOperation {
    * is created with RenameProps{ userCustomNameOnly:false }.
    * The updated stack name or resource's name is returned.
    * @param resourceName The original resource physical name (if it is not user
-   * specified custom name, it is a AWS generated name/token, can be checked with
+   * specified custom name, it is a AWS generated unique id/token, can be checked with
    * cdk.Token.isUnresolved()). If you want to keep original resource name,
    * simply return it in "rename" function.
    * @param resourceType The type name of CFN resource.
@@ -178,7 +178,7 @@ export class StackResourceRenamer implements cdk.IAspect {
   /**
    * check if a resName(resource name) is a valid target for rename;
    */
-  isTarget(resName: any): boolean {
+  protected isTarget(resName: any): boolean {
     let isAWSGenerated = cdk.Token.isUnresolved(resName);
     if (this.customNameOnly && isAWSGenerated) {
       return false;
