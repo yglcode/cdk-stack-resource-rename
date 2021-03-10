@@ -27,8 +27,8 @@ const project = new AwsCdkConstructLibrary({
   releaseBranches: ['main'],
 
   publishToMaven: {
-    javaPackage: 'cdkutils.aspects.resourcerename',
-    mavenGroupId: 'cdkutils.aspects.resourcerename',
+    javaPackage: 'io.github.yglcode.cdkutils.aspects.resourcerename',
+    mavenGroupId: 'io.github.yglcode.cdkutils.aspects.resourcerename',
     mavenArtifactId: 'cdk-stack-resource-rename',
   },
 

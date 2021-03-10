@@ -113,9 +113,9 @@
     "outdir": "dist",
     "targets": {
       "java": {
-        "package": "cdkutils.aspects.resourcerename",
+        "package": "io.github.yglcode.cdkutils.aspects.resourcerename",
         "maven": {
-          "groupId": "cdkutils.aspects.resourcerename",
+          "groupId": "io.github.yglcode.cdkutils.aspects.resourcerename",
           "artifactId": "cdk-stack-resource-rename"
         }
       },
