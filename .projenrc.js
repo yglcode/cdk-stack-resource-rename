@@ -30,6 +30,7 @@ const project = new AwsCdkConstructLibrary({
     javaPackage: 'io.github.yglcode.cdkutils.aspects.resourcerename',
     mavenGroupId: 'io.github.yglcode.cdkutils.aspects.resourcerename',
     mavenArtifactId: 'cdk-stack-resource-rename',
+    mavenServerId: 'github',
   },
 
   publishToPypi: {
