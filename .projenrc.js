@@ -31,6 +31,7 @@ const project = new AwsCdkConstructLibrary({
     mavenGroupId: 'io.github.yglcode.cdkutils.aspects.resourcerename',
     mavenArtifactId: 'cdk-stack-resource-rename',
     mavenServerId: 'github',
+    mavenRepositoryUrl: 'https://s01.oss.sonatype.org',
   },
 
   publishToPypi: {
