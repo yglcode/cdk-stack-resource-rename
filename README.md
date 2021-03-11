@@ -78,8 +78,8 @@ class AppStack(core.Stack):
 ```
 *java*
 ```java
-import cdkutils.aspects.resourcerename.StackResourceRenamer;
-import cdkutils.aspects.resourcerename.IRenameOperation;
+import io.github.yglcode.cdkutils.aspects.resourcerename.StackResourceRenamer;
+import io.github.yglcode.cdkutils.aspects.resourcerename.IRenameOperation;
 
 public class AppStack extends Stack {
     ......

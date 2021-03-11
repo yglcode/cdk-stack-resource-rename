@@ -48,19 +48,6 @@ new StackResourceRenamer(renameOper: IRenameOperation, props?: RenameProps)
 ### Methods
 
 
-#### isTarget(resName) <a id="cdk-stack-resource-rename-stackresourcerenamer-istarget"></a>
-
-check if a resName(resource name) is a valid target for rename;
-
-```ts
-isTarget(resName: any): boolean
-```
-
-* **resName** (<code>any</code>)  *No description*
-
-__Returns__:
-* <code>boolean</code>
-
 #### visit(node) <a id="cdk-stack-resource-rename-stackresourcerenamer-visit"></a>
 
 Implement core.IAspect interface.
@@ -73,6 +60,19 @@ visit(node: IConstruct): void
 
 
 
+
+#### protected isTarget(resName) <a id="cdk-stack-resource-rename-stackresourcerenamer-istarget"></a>
+
+check if a resName(resource name) is a valid target for rename;
+
+```ts
+protected isTarget(resName: any): boolean
+```
+
+* **resName** (<code>any</code>)  *No description*
+
+__Returns__:
+* <code>boolean</code>
 
 #### protected renameResource(node, resTypeName) <a id="cdk-stack-resource-rename-stackresourcerenamer-renameresource"></a>
 
@@ -128,7 +128,7 @@ The updated stack name or resource's name is returned.
 rename(resourceName: string, resourceType: string): string
 ```
 
-* **resourceName** (<code>string</code>)  The original resource physical name (if it is not user specified custom name, it is a AWS generated name/token, can be checked with cdk.Token.isUnresolved()).
+* **resourceName** (<code>string</code>)  The original resource physical name (if it is not user specified custom name, it is a AWS generated unique id/token, can be checked with cdk.Token.isUnresolved()). If you want to keep original resource name, simply return it in "rename" function.
 * **resourceType** (<code>string</code>)  The type name of CFN resource.
 
 __Returns__:
