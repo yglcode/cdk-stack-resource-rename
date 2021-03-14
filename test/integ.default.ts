@@ -2,7 +2,6 @@ import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as core from '@aws-cdk/core';
-import { StackResourceRenamer } from '../src/index';
 
 export class IntegTesting {
   readonly stack: core.Stack[]
@@ -15,16 +14,6 @@ export class IntegTesting {
     };
 
     const stack = new core.Stack(app, 'integration-stack', { env });
-
-    let alias = stack.node.tryGetContext('alias');
-    if (alias===undefined) {
-      alias='xxx';
-    }
-    StackResourceRenamer.rename(stack, {
-      rename: (origName, _)=>{
-        return origName+'-'+alias;
-      },
-    });
 
     //for integration test
     this.stack = [stack];

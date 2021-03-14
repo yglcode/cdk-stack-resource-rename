@@ -1,6 +1,7 @@
 [![NPM version](https://badge.fury.io/js/cdk-stack-resource-rename.svg)](https://badge.fury.io/js/cdk-stack-resource-rename)
 [![PyPI version](https://badge.fury.io/py/cdk-stack-resource-rename.svg)](https://badge.fury.io/py/cdk-stack-resource-rename)
 [![Nuget version](https://badge.fury.io/nu/cdk-stack-resource-rename.svg)](https://badge.fury.io/nu/CdkUtils.Aspects.ResourceRename)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.yglcode.cdkutils.aspects.resourcerename/cdk-stack-resource-rename/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/io.github.yglcode.cdkutils.aspects.resourcerename/cdk-stack-resource-rename)
 ![Release](https://github.com/yglcode/cdk-stack-resource-rename/workflows/Release/badge.svg)
 
 
